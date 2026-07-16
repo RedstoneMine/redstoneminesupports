@@ -52,14 +52,13 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
     btn.innerText = 'Отправка...';
     btn.disabled = true;
 
-    // Сбор данных из полей
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const category = document.getElementById('category').value;
     const message = document.getElementById('message').value;
 
     const webhookPart1 = "https://discord.com";
-    const webhookPart2 = "/api/webhooks/1527259351503474698/Dwuwc66lMFbTDerFVm6tnN9Ewel_K8wk8lKFKyIquJLFkpHrFdUCF2Yob1NmW3sCfXpr"; // Скопируй из ДИСКОРДА всё, что идет ПОСЛЕ слова webhooks/
+    const webhookPart2 = "/api/webhooks/1527268863295623228/7FEotjV5zviBE4ESJQrbIxw-sFdzP49pxi-huw0pkxp_3pWcynYzEokVzftI15q2d285";
     
     const fullWebhook = webhookPart1 + webhookPart2;
 
