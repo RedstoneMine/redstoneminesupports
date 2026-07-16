@@ -57,10 +57,8 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
     const category = document.getElementById('category').value;
     const message = document.getElementById('message').value;
 
-    // Вставлена ваша правильная и точная ссылка на Cloudflare Worker
     const workerUrl = "https://2support.sigmabrotrue67.workers.dev";
 
-    // Структура карточки (Embed) полностью сохранена
     const discordMessage = {
         embeds: [{
             title: "📩 Новое обращение в техподдержку!",
@@ -76,7 +74,6 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
         }]
     };
 
-    // Отправляем данные на Cloudflare Worker вместо Discord
     fetch(workerUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
