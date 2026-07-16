@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Техподдержка | RedstoneMine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="support-container">
+    <h2>Поддержка RedstoneMine</h2>
+    
+    <form id="supportForm">
+        <div class="form-group">
+            <label for="username">Ваш ник в игре:</label>
+            <input type="text" id="username" placeholder="Никнейм" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Ваш Email (для ответа):</label>
+            <input type="email" id="email" placeholder="example@mail.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Тип обращения:</label>
+            <select id="category" required>
+                <option value="" disabled selected>Выберите тему...</option>
+                <option value="Апелляция (Разбан/Размут)">Апелляция (Разбан/Размут)</option>
+                <option value="Жалоба на игрока / читера">Жалоба на игрока / читера</option>
+                <option value="Проблема с донатом или экономикой">Проблема с донатом или экономикой</option>
+                <option value="Нашёл баг / ошибка сервера">Нашёл баг / ошибка сервера</option>
+                <option value="Идея или предложение для проекта">Идея или предложение для проекта</option>
+                <option value="Другой вопрос">Другой вопрос</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Суть обращения / Описание проблемы:</label>
+            <textarea id="message" rows="6" placeholder="Опишите вашу проблему подробнее..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Отправить обращение</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('supportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = 'Отправка...';
+    btn.disabled = true;
+
+    // Сбор данных из полей
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const category = document.getElementById('category').value;
+    const message = document.getElementById('message').value;
+
+    const webhookPart1 = "https://discord.com";
+    const webhookPart2 = "/api/webhooks/1527259351503474698/Dwuwc66lMFbTDerFVm6tnN9Ewel_K8wk8lKFKyIquJLFkpHrFdUCF2Yob1NmW3sCfXpr"; // Скопируй из ДИСКОРДА всё, что идет ПОСЛЕ слова webhooks/
+    
+    const fullWebhook = webhookPart1 + webhookPart2;
+
+    const discordMessage = {
+        embeds: [{
+            title: "📩 Новое обращение в техподдержку!",
+            color: 52479,
+            fields: [
+                { name: "👤 Игрок:", value: username, inline: true },
+                { name: "📧 Email:", value: email, inline: true },
+                { name: "📂 Категория:", value: category, inline: false },
+                { name: "📝 Текст обращения:", value: message, inline: false }
+            ],
+            footer: { text: "Заявка с сайта RedstoneMine" },
+            timestamp: new Date()
+        }]
+    };
+
+    fetch(fullWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(discordMessage)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Ваше обращение успешно отправлено в Discord!');
+            document.getElementById('supportForm').reset();
+        } else {
+            alert('Ошибка отправки. Проверьте вебхук.');
+        }
+    })
+    .catch(error => {
+        alert('Ошибка сети.');
+        console.error(error);
+    })
+    .finally(() => {
+        btn.innerText = 'Отправить обращение';
+        btn.disabled = false;
+    });
+});
+</script>
+
+</body>
+</html>
