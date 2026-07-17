@@ -76,3 +76,96 @@ textarea {
 .submit-btn:hover {
     background-color: #008cc8;
 }
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: #1e1e24;
+    color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 420px;
+    width: 85%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    text-align: center;
+    border: 2px solid #52479e;
+}
+
+.modal-box h3 {
+    margin-top: 0;
+    color: #52479e;
+    font-size: 22px;
+}
+
+.modal-box p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cccccc;
+    margin: 15px 0 20px 0;
+}
+
+.modal-link {
+    color: #00cdff;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.modal-link:hover {
+    color: #0099ff;
+}
+
+.modal-btn {
+    background: #52479e;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.modal-btn:hover {
+    background: #413782;
+}
+
+.agreement-content {
+    color: #cccccc;
+    font-size: 15px;
+    line-height: 1.7;
+    text-align: left;
+    margin: 25px 0;
+}
+
+.agreement-content p {
+    margin-bottom: 20px;
+}
+
+/* Выделение заголовков пунктов (1, 2, 3) */
+.agreement-content strong {
+    color: #52479e;
+    font-size: 16px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
