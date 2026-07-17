@@ -8,6 +8,18 @@
 </head>
 <body>
 
+<div class="modal-overlay active" id="agreementModal">
+    <div class="modal-box">
+        <h3>📄 Внимание</h3>
+        <p>
+            Нажимая кнопку «Принимаю условия», вы принимаете 
+            <a href="agreement.html" target="_blank" class="modal-link">Пользовательское соглашение</a> 
+            проекта RedstoneMine и несете полную ответственность за свои действия.
+        </p>
+        <button class="modal-btn" id="acceptBtn">Принимаю условия</button>
+    </div>
+</div>
+
 <div class="support-container">
     <h2>Поддержка RedstoneMine</h2>
     
@@ -37,7 +49,7 @@
 
         <div class="form-group">
             <label for="message">Суть обращения / Описание проблемы:</label>
-            <textarea id="message" rows="6" placeholder="Опишите вашу проблему подробнее..." required></textarea>
+            <textarea id="message" rows="6" placeholder="Опишите вашу проблему подробнее..." required maxlength="1000"></textarea>
         </div>
 
         <button type="submit" class="submit-btn" id="submitBtn">Отправить обращение</button>
@@ -45,6 +57,10 @@
 </div>
 
 <script>
+document.getElementById('acceptBtn').addEventListener('click', function() {
+    document.getElementById('agreementModal').classList.remove('active');
+});
+
 document.getElementById('supportForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
