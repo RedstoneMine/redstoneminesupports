@@ -74,26 +74,24 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
     const message = document.getElementById('message').value;
 
     const workerUrl = "https://2support.sigmabrotrue67.workers.dev";
-    
-    const secretKey = "t4ewf4frg4gg4";
 
     const discordMessage = {
         embeds: [{
+            title: "📩 Новое обращение в техподдержку!",
+            color: 52479,
             fields: [
                 { name: "👤 Игрок:", value: username, inline: true },
                 { name: "📧 Email:", value: email, inline: true },
                 { name: "📂 Категория:", value: category, inline: false },
                 { name: "📝 Текст обращения:", value: message, inline: false }
-            ]
+            ],
+            footer: { text: "Заявка с сайта RedstoneMine" },
+            timestamp: new Date()
         }]
     };
-
     fetch(workerUrl, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'X-Secret-Key': secretKey
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(discordMessage)
     })
     .then(response => response.json())
@@ -102,7 +100,7 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
             alert('Ваше обращение успешно отправлено!');
             document.getElementById('supportForm').reset();
         } else {
-            alert('Ошибка отправки: ' + (data.error || 'Неизвестная ошибка сервера защиты.'));
+            alert('Ошибка отправки через сервер защиты.');
         }
     })
     .catch(error => {
