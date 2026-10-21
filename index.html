@@ -1,118 +1,514 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#171923">
     <title>Техподдержка | RedstoneMine</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="servLogo.png" type="image/png">
 </head>
 <body>
 
+<!-- Пользовательское соглашение -->
 <div class="modal-overlay active" id="agreementModal">
     <div class="modal-box">
         <h3>📄 Внимание</h3>
         <p>
-            Нажимая кнопку «Принимаю условия», вы принимаете 
-            <a href="agreement.html" target="_blank" class="modal-link">Пользовательское соглашение</a> 
-            проекта RedstoneMine и несете полную ответственность за свои действия.
+            Нажимая кнопку «Принимаю условия», вы принимаете
+            <a href="agreement.html" target="_blank" rel="noopener noreferrer"
+               class="modal-link">Пользовательское соглашение</a>
+            проекта RedstoneMine и несёте ответственность за свои действия.
         </p>
-        <button class="modal-btn" id="acceptBtn">Принимаю условия</button>
+        <button type="button" class="modal-btn" id="acceptBtn">
+            Принимаю условия
+        </button>
     </div>
 </div>
 
-<div class="support-container">
+<main class="support-container">
     <h2>Поддержка RedstoneMine</h2>
-    
-    <form id="supportForm">
-        <div class="form-group">
-            <label for="username">Ваш ник в игре:</label>
-            <input type="text" id="username" placeholder="Никнейм" required>
-        </div>
+
+    <p id="statusMessage" role="status" aria-live="polite">
+        Проверяем ваш аккаунт...
+    </p>
+
+    <!-- Регистрация -->
+    <section id="registrationSection" hidden>
+        <h3>Создание аккаунта</h3>
+        <p>
+            Придумайте уникальный ник для аккаунта техподдержки.
+            Пароль не нужен: аккаунт будет привязан к этому браузеру.
+        </p>
+
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="accountUsername">Ник аккаунта:</label>
+                <input
+                    type="text"
+                    id="accountUsername"
+                    placeholder="Например, RedstonePlayer"
+                    minlength="3"
+                    maxlength="16"
+                    pattern="[A-Za-z0-9_]{3,16}"
+                    autocomplete="username"
+                    required
+                >
+                <small>
+                    3–16 символов: латинские буквы, цифры и знак _.
+                </small>
+            </div>
+
+            <button type="submit" class="submit-btn" id="registerBtn">
+                Создать аккаунт
+            </button>
+        </form>
+
+        <p id="registrationError" role="alert" hidden></p>
+    </section>
+
+    <!-- Профиль -->
+    <section id="profileSection" hidden>
+        <h3>Ваш аккаунт</h3>
 
         <div class="form-group">
-            <label for="email">Ваш Email (для ответа):</label>
-            <input type="email" id="email" placeholder="example@mail.com" required>
+            <label>Ник аккаунта:</label>
+            <p id="profileUsername"></p>
         </div>
 
-        <div class="form-group">
-            <label for="category">Тип обращения:</label>
-            <select id="category" required>
-                <option value="" disabled selected>Выберите тему...</option>
-                <option value="Апелляция (Разбан/Размут)">Апелляция (Разбан/Размут)</option>
-                <option value="Жалоба на игрока / читера">Жалоба на игрока / читера</option>
-                <option value="Проблема с донатом или экономикой">Проблема с донатом или экономикой</option>
-                <option value="Нашёл баг / ошибка сервера">Нашёл баг / ошибка сервера</option>
-                <option value="Идея или предложение для проекта">Идея или предложение для проекта</option>
-                <option value="Другой вопрос">Другой вопрос</option>
-            </select>
-        </div>
+        <p id="accountStatus"></p>
+        <p id="banReason" role="alert" hidden></p>
+    </section>
 
-        <div class="form-group">
-            <label for="message">Суть обращения / Описание проблемы:</label>
-            <textarea id="message" rows="6" placeholder="Опишите вашу проблему подробнее..." required maxlength="1000"></textarea>
-        </div>
+    <!-- Форма обращения -->
+    <section id="ticketSection" hidden>
+        <h3>Новое обращение</h3>
 
-        <button type="submit" class="submit-btn" id="submitBtn">Отправить обращение</button>
-    </form>
-</div>
+        <p>
+            Обращение будет отправлено от имени вашего аккаунта
+            техподдержки.
+        </p>
+
+        <form id="supportForm">
+            <div class="form-group">
+                <label for="gameUsername">Ваш ник в игре:</label>
+                <input
+                    type="text"
+                    id="gameUsername"
+                    placeholder="Никнейм в Minecraft"
+                    maxlength="16"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Ваш Email (для ответа):</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="example@mail.com"
+                    maxlength="254"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="category">Тип обращения:</label>
+                <select id="category" required>
+                    <option value="" disabled selected>
+                        Выберите тему...
+                    </option>
+                    <option value="Апелляция (Разбан/Размут)">
+                        Апелляция (Разбан/Размут)
+                    </option>
+                    <option value="Жалоба на игрока / читера">
+                        Жалоба на игрока / читера
+                    </option>
+                    <option value="Проблема с донатом или экономикой">
+                        Проблема с донатом или экономикой
+                    </option>
+                    <option value="Нашёл баг / ошибка сервера">
+                        Нашёл баг / ошибка сервера
+                    </option>
+                    <option value="Идея или предложение для проекта">
+                        Идея или предложение для проекта
+                    </option>
+                    <option value="Другой вопрос">Другой вопрос</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">
+                    Суть обращения / Описание проблемы:
+                </label>
+                <textarea
+                    id="message"
+                    rows="6"
+                    placeholder="Опишите вашу проблему подробнее..."
+                    maxlength="1000"
+                    required
+                ></textarea>
+            </div>
+
+            <button
+                type="submit"
+                class="submit-btn"
+                id="submitBtn"
+            >
+                Отправить обращение
+            </button>
+        </form>
+
+        <p id="ticketMessage" role="status" aria-live="polite"></p>
+    </section>
+
+    <noscript>
+        Для работы техподдержки необходимо включить JavaScript.
+    </noscript>
+</main>
 
 <script>
-document.getElementById('acceptBtn').addEventListener('click', function() {
-    document.getElementById('agreementModal').classList.remove('active');
-});
+(() => {
+    "use strict";
 
-document.getElementById('supportForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const btn = document.getElementById('submitBtn');
-    btn.innerText = 'Отправка...';
-    btn.disabled = true;
+    const WORKER_URL =
+        "https://2support.sigmabrotrue67.workers.dev";
 
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const category = document.getElementById('category').value;
-    const message = document.getElementById('message').value;
+    const TOKEN_KEY = "redstonemine_support_browser_token";
 
-    const workerUrl = "https://2support.sigmabrotrue67.workers.dev";
+    const $ = id => document.getElementById(id);
 
-    const discordMessage = {
-        embeds: [{
-            title: "📩 Новое обращение в техподдержку!",
-            color: 52479,
-            fields: [
-                { name: "👤 Игрок:", value: username, inline: true },
-                { name: "📧 Email:", value: email, inline: true },
-                { name: "📂 Категория:", value: category, inline: false },
-                { name: "📝 Текст обращения:", value: message, inline: false }
-            ],
-            footer: { text: "Заявка с сайта RedstoneMine" },
-            timestamp: new Date()
-        }]
-    };
-    fetch(workerUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(discordMessage)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Ваше обращение успешно отправлено!');
-            document.getElementById('supportForm').reset();
-        } else {
-            alert('Ошибка отправки через сервер защиты.');
-        }
-    })
-    .catch(error => {
-        alert('Ошибка сети.');
-        console.error(error);
-    })
-    .finally(() => {
-        btn.innerText = 'Отправить обращение';
-        btn.disabled = false;
+    const agreementModal = $("agreementModal");
+    const statusMessage = $("statusMessage");
+    const registrationSection = $("registrationSection");
+    const profileSection = $("profileSection");
+    const ticketSection = $("ticketSection");
+
+    let browserToken = null;
+    let currentUsername = null;
+    let busy = false;
+
+    // Пользовательское соглашение
+    $("acceptBtn").addEventListener("click", () => {
+        agreementModal.classList.remove("active");
     });
-});
+
+    // Сообщения интерфейса
+    function setStatus(message) {
+        statusMessage.textContent = message;
+    }
+
+    function showRegistration(message = "") {
+        registrationSection.hidden = false;
+        profileSection.hidden = true;
+        ticketSection.hidden = true;
+
+        $("registrationError").textContent = message;
+        $("registrationError").hidden = !message;
+
+        setStatus("Для отправки обращений создайте аккаунт.");
+    }
+
+    function showError(elementId, message) {
+        const element = $(elementId);
+        element.textContent = message;
+        element.hidden = false;
+    }
+
+    function hideError(elementId) {
+        const element = $(elementId);
+        element.textContent = "";
+        element.hidden = true;
+    }
+
+    // Создаём криптографически случайный токен из 32 байт.
+    // Base64URL-представление такого токена содержит 43 символа.
+    function createBrowserToken() {
+        if (!window.crypto || !window.crypto.getRandomValues) {
+            throw new Error(
+                "Браузер не поддерживает безопасную генерацию токена."
+            );
+        }
+
+        const bytes = new Uint8Array(32);
+        window.crypto.getRandomValues(bytes);
+
+        let binary = "";
+
+        for (const byte of bytes) {
+            binary += String.fromCharCode(byte);
+        }
+
+        return btoa(binary)
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_")
+            .replace(/=+$/g, "");
+    }
+
+    function getBrowserToken() {
+        let token = localStorage.getItem(TOKEN_KEY);
+
+        if (!token) {
+            token = createBrowserToken();
+            localStorage.setItem(TOKEN_KEY, token);
+        }
+
+        if (!/^[A-Za-z0-9_-]{43}$/.test(token)) {
+            throw new Error(
+                "Токен браузера повреждён. Очистите данные сайта и попробуйте снова."
+            );
+        }
+
+        return token;
+    }
+
+    // Единый способ обращения к Worker.
+    async function api(action, extra = {}) {
+        const response = await fetch(WORKER_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            cache: "no-store",
+            body: JSON.stringify({
+                action,
+                token: browserToken,
+                ...extra
+            })
+        });
+
+        let data;
+
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("Сервер вернул некорректный ответ.");
+        }
+
+        if (!response.ok && !data.error) {
+            throw new Error("Ошибка сервера. Попробуйте позже.");
+        }
+
+        return {
+            ok: response.ok,
+            data
+        };
+    }
+
+    // Отображение профиля и результата проверки бана.
+    function displayUser(user) {
+        if (!user || typeof user.username !== "string") {
+            throw new Error("Не удалось загрузить профиль аккаунта.");
+        }
+
+        currentUsername = user.username;
+
+        registrationSection.hidden = true;
+        profileSection.hidden = false;
+
+        $("profileUsername").textContent = currentUsername;
+
+        if (user.banned) {
+            ticketSection.hidden = true;
+
+            $("accountStatus").textContent =
+                "Статус аккаунта: заблокирован.";
+
+            const reason = user.banReason || "Причина не указана";
+
+            showError("banReason", "Причина блокировки: " + reason);
+
+            setStatus(
+                "Ваш аккаунт заблокирован. Отправка обращений недоступна."
+            );
+
+            return;
+        }
+
+        $("accountStatus").textContent =
+            "Статус аккаунта: активен.";
+
+        hideError("banReason");
+        ticketSection.hidden = false;
+
+        setStatus("Аккаунт загружен. Можно отправлять обращение.");
+    }
+
+    // Автоматическое восстановление профиля.
+    async function initialize() {
+        setStatus("Проверяем ваш аккаунт...");
+
+        try {
+            browserToken = getBrowserToken();
+
+            const result = await api("me");
+
+            if (result.data.registered && result.data.user) {
+                displayUser(result.data.user);
+            } else {
+                currentUsername = null;
+                showRegistration();
+            }
+        } catch (error) {
+            console.error("Account initialization failed:", error);
+
+            registrationSection.hidden = true;
+            profileSection.hidden = true;
+            ticketSection.hidden = true;
+
+            setStatus(
+                "Не удалось связаться с сервером или загрузить аккаунт. " +
+                (error.message || "Попробуйте обновить страницу.")
+            );
+        }
+    }
+
+    // Регистрация
+    $("registrationForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (busy || !browserToken) return;
+
+        const username = $("accountUsername").value.trim();
+
+        if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) {
+            showError(
+                "registrationError",
+                "Используйте 3–16 символов: латинские буквы, цифры и _."
+            );
+            return;
+        }
+
+        busy = true;
+
+        const button = $("registerBtn");
+        button.disabled = true;
+        button.textContent = "Создание аккаунта...";
+
+        hideError("registrationError");
+
+        try {
+            const result = await api("register", { username });
+
+            if (!result.ok) {
+                if (result.data.user) {
+                    displayUser(result.data.user);
+                } else {
+                    showRegistration(
+                        result.data.error || "Не удалось создать аккаунт."
+                    );
+                }
+
+                return;
+            }
+
+            if (!result.data.user) {
+                showRegistration(
+                    "Сервер не вернул данные созданного аккаунта."
+                );
+                return;
+            }
+
+            displayUser(result.data.user);
+            $("registrationForm").reset();
+
+        } catch (error) {
+            console.error("Registration failed:", error);
+
+            showRegistration(
+                error.message || "Ошибка сети. Попробуйте позже."
+            );
+        } finally {
+            busy = false;
+            button.disabled = false;
+            button.textContent = "Создать аккаунт";
+        }
+    });
+
+    // Отправка обращения.
+    // Ник аккаунта Worker получает из D1 по токену, а не из формы.
+    $("supportForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (busy || !browserToken || !currentUsername) return;
+
+        const button = $("submitBtn");
+
+        const gameUsername = $("gameUsername").value.trim();
+        const email = $("email").value.trim();
+        const category = $("category").value;
+        const message = $("message").value.trim();
+
+        if (!gameUsername || !email || !category || !message) {
+            showError("ticketMessage", "Заполните все поля формы.");
+            return;
+        }
+
+        if (message.length > 1000) {
+            showError(
+                "ticketMessage",
+                "Текст обращения не должен превышать 1000 символов."
+            );
+            return;
+        }
+
+        busy = true;
+        button.disabled = true;
+        button.textContent = "Отправка...";
+        hideError("ticketMessage");
+
+        try {
+            const result = await api("submit", {
+                gameUsername,
+                email,
+                category,
+                message
+            });
+
+            if (result.data.banned) {
+                displayUser({
+                    username: currentUsername,
+                    banned: true,
+                    banReason: result.data.reason
+                });
+
+                return;
+            }
+
+            if (!result.ok || !result.data.success) {
+                showError(
+                    "ticketMessage",
+                    result.data.error || "Не удалось отправить обращение."
+                );
+                return;
+            }
+
+            $("supportForm").reset();
+
+            $("ticketMessage").textContent =
+                "Обращение успешно отправлено!";
+
+            $("ticketMessage").hidden = false;
+
+        } catch (error) {
+            console.error("Ticket submission failed:", error);
+
+            showError(
+                "ticketMessage",
+                error.message || "Ошибка сети. Попробуйте позже."
+            );
+        } finally {
+            busy = false;
+            button.disabled = false;
+            button.textContent = "Отправить обращение";
+        }
+    });
+
+    initialize();
+})();
 </script>
 
 </body>
